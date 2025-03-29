@@ -6,7 +6,7 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://clipboard-x.vercel.app'],
+    origin: ['http://localhost:5173', 'https://clipboard-x.vercel.app', 'https://clipsync-x.vercel.app'],
     methods: 'GET, POST, PUT, DELETE',
     allowedHeaders: 'Content-Type',
     credentials: true,

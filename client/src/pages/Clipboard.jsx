@@ -1,116 +1,222 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import ClipboardItem from "../components/ClipboardItem";
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { Navbar } from "@/components/Navbar"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { ClipboardCopy, Plus, X, Check, Loader2 } from "lucide-react"
+import { useToast } from "@/components/ui/toast"
+import axios from "axios"
 
-const Clipboard = () => {
-    const { code } = useParams();
-    const [items, setItems] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [title, setTitle] = useState("");
-    const [text, setText] = useState("");
-    const [clipboardExists, setClipboardExists] = useState(true);
-    const [loading, setLoading] = useState(true);
+export default function Clipboard() {
+    const { code } = useParams()
+    const [items, setItems] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [title, setTitle] = useState("No Title")
+    const [text, setText] = useState("")
+    const [clipboardExists, setClipboardExists] = useState(true)
+    const [loading, setLoading] = useState(true)
+    const { toast } = useToast()
 
     useEffect(() => {
+        if (!code) return // Prevents unnecessary requests if code is undefined
         const fetchItems = async () => {
-            setLoading(true);
+            setLoading(true)
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API}/clipboard/${code}`);
+                const response = await axios.get(`${import.meta.env.VITE_API}/clipboard/${code}`)
                 if (response.status === 200) {
-                    setItems(response.data.items);
-                    setClipboardExists(true);
+                    setItems(response.data.items || [])
+                    setClipboardExists(true)
                 }
             } catch (error) {
-                console.error("Error fetching clipboard items:", error);
-                setClipboardExists(false);
+                console.error("Error fetching clipboard items:", error)
+                setClipboardExists(false)
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-        };
-
-        fetchItems();
-    }, [code]);
-
-    const addItem = async () => {
-        if (!title.trim() || !text.trim()) {
-            alert("Title and text cannot be empty!");
-            return;
         }
 
-        const newItem = { title, text };
+        fetchItems()
+    }, [code])
+
+    const addItem = async () => {
+        if (!text.trim()) {
+            toast({
+                title: "Error",
+                description: "Title and text cannot be empty!",
+                variant: "destructive",
+            })
+            return
+        }
+
+        setLoading(true)
+
+        const newItem = { title, text }
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/add-item`, {
                 code,
                 item: newItem,
-            });
+            })
 
             if (response.status === 200 || response.status === 201) {
-                setItems(response.data.items);
-                setShowModal(false);
-                setTitle("");
-                setText("");
+                setItems(response.data.items || [])
+                setShowModal(false)
+                setTitle("")
+                setText("")
+                toast({
+                    title: "Success",
+                    description: "Item added to clipboard",
+                })
             }
         } catch (error) {
-            console.error("Error adding item:", error);
+            toast({
+                title: "Error",
+                description: "Failed to add item. Please try again.",
+                variant: "destructive",
+            })
+            console.error("Error adding item:", error)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
     return (
-        <div className="flex flex-col items-center relative min-h-screen">
-            <h1 className="text-3xl font-bold mt-4">Clipboard - {code}</h1>
-
-            {loading ? (
-                <p className="text-gray-500 text-center mt-4">Loading...</p>
-            ) : clipboardExists ? (
-                <div className="mt-4 w-full max-w-2xl">
-                    {items.length > 0 ? (
-                        items.map((item, id) => (
-                            <ClipboardItem key={id} item={item}/>
-                        ))
-                    ) : (
-                        <p className="text-gray-500 text-center">No items found.</p>
-                    )}
+        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
+            <Navbar />
+            <main className="flex-1 container py-6">
+                <div className="flex items-center justify-between mb-6">
+                    <h1 className="text-3xl font-bold">
+                        Clipboard <span className="text-blue-600 dark:text-blue-400">{code}</span>
+                    </h1>
                 </div>
-            ) : (
-                <p className="text-red-500 text-center mt-4 text-xl font-semibold">No clipboard found.</p>
-            )}
 
-            {clipboardExists && (
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white w-10 h-10 rounded-full shadow-lg text-lg">
-                    +
-                </button>
-            )}
+                {loading ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="border rounded-lg p-4 animate-pulse bg-gray-200 dark:bg-gray-700"></div>
+                        ))}
+                    </div>
+                ) : clipboardExists ? (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {items.length > 0 ? (
+                            items.slice().reverse().map((item, id) => (
+                                <ClipboardItem key={id} item={item} toast={toast} />
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-12">
+                                <h3 className="text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
+                                    No items found
+                                </h3>
+                                <Button onClick={() => setShowModal(true)}>
+                                    <Plus className="mr-2 h-4 w-4" /> Add Item
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="text-center py-12">
+                        <h3 className="text-xl font-medium text-red-500 mb-2">No clipboard found</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">The clipboard code you entered doesn't exist</p>
+                    </div>
+                )}
 
-            {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/20 bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-                        <h2 className="text-2xl font-bold mb-4">Add New Item</h2>
-                        <input
-                            type="text"
-                            placeholder="Enter title"
-                            className="w-full border p-2 mb-3 rounded"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-                        <textarea
-                            placeholder="Enter your text"
-                            className="w-full border p-2 rounded h-40"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                        ></textarea>
-                        <div className="flex justify-end mt-4">
-                            <button onClick={() => setShowModal(false)} className="px-4 py-2 mr-2 border rounded">Cancel</button>
-                            <button onClick={addItem} className="px-4 py-2 bg-blue-500 text-white rounded">Add</button>
+                {clipboardExists && items.length > 0 && (
+                    <Button
+                        onClick={() => setShowModal(true)}
+                        className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg"
+                    >
+                        <Plus className="h-6 w-6" />
+                    </Button>
+                )}
+
+                {showModal && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black/20 bg-opacity-50 z-50">
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+                            {/* Header */}
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-2xl font-bold">Add New Item</h2>
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    disabled={loading}
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            {/* Input Fields */}
+                            <div className="grid gap-4 py-4">
+                                <Input
+                                    placeholder="Enter title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    disabled={loading}
+                                />
+                                <Textarea
+                                    placeholder="Enter your text"
+                                    className="min-h-[150px]"
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            {/* Buttons */}
+                            <div className="flex justify-end gap-2 mt-4">
+                                <Button variant="outline" onClick={() => setShowModal(false)} disabled={loading}>
+                                    Cancel
+                                </Button>
+                                <Button onClick={addItem} disabled={loading}>
+                                    {loading ? (
+                                        <span className="flex items-center gap-2">
+                                            <Loader2 className="h-5 w-5 animate-spin" />
+                                        </span>
+                                    ) : (
+                                        "Add Item"
+                                    )}
+                                </Button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </main>
         </div>
-    );
-};
+    )
+}
 
-export default Clipboard;
+function ClipboardItem({ item, toast }) {
+    const [copied, setCopied] = useState(false)
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(item.text)
+        setCopied(true)
+        toast({
+            title: "Copied!",
+            description: "Text has been copied to your clipboard.",
+            duration: 2000,
+        })
+        setTimeout(() => setCopied(false), 2000)
+    }
+
+    return (
+        <div className="relative overflow-hidden bg-white/10 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="p-5 flex flex-col gap-3">
+                {/* Title + Copy Button */}
+                <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 line-clamp-1">{item.title}</h3>
+                    <button
+                        className={`p-2 rounded-full border transition-all ${copied ? "bg-green-500/20 border-green-500 text-green-500" : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                            }`}
+                        onClick={handleCopy}
+                    >
+                        {copied ? <Check className="h-5 w-5" /> : <ClipboardCopy className="h-5 w-5" />}
+                    </button>
+                </div>
+
+                {/* Text */}
+                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{item.text}</p>
+            </div>
+        </div>
+    )
+}
