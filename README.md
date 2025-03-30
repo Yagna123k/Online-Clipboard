@@ -25,21 +25,36 @@ Online Clipboard is a seamless, cloud-based clipboard that allows users to store
 ## 🚀 Getting Started
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/online-clipboard.git
+git clone https://github.com/Yagna123k/Online-Clipboard.git
 cd online-clipboard
 ```
 ### 2️⃣ Install Dependencies
 ```bash
+cd client
+npm install
+```
+```bash
+cd server
 npm install
 ```
 ### 3️⃣ Configure Environment Variables
-Create a `.env` file in the root directory and add:
+Create a `.env` file in the root directory of client and add:
 ```
 VITE_API_URL=http://localhost:5000
+```
+Create a `.env` file in the root directory of server and add:
+```
+PORT=5000
+MongoURI=
 ```
 
 ### 4️⃣ Run the Application
 ```bash
+cd client
+npm run dev
+```
+```bash
+cd server
 npm run dev
 ```
 
