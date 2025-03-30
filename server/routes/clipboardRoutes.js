@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.post('/go', createOrAuthenticateClipboard);
 router.post('/add-item', addItem);
-router.get('/:code', getClipboardItems);
+router.post('/:code', getClipboardItems);
 
 module.exports = router;

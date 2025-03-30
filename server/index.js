@@ -1,5 +1,4 @@
 const express = require("express")
-const bcrypt = require('bcryptjs');
 const cors = require('cors')
 
 const app = express()
@@ -20,7 +19,7 @@ app.use('/clipboard', clipboardRoutes);
 
 
 app.get("/", (req, res) => {
-    res.send("Online Clipboard server is working..🎉")
+    res.send("Online Clipboard server is working..🥳")
 })
 const PORT = process.env.PORT || 5000;
 

@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ClipboardCopy, Plus, X, Check, Loader2 } from "lucide-react"
+import { ClipboardCopy, Plus, X, Check, Loader2, Copy } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
 import axios from "axios"
 
@@ -19,11 +19,18 @@ export default function Clipboard() {
     const { toast } = useToast()
 
     useEffect(() => {
-        if (!code) return // Prevents unnecessary requests if code is undefined
+        if (!code) return
+    
         const fetchItems = async () => {
             setLoading(true)
+    
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API}/clipboard/${code}`)
+                const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`)
+    
+                const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/${code}`, {
+                    passcode: storedPasscode || undefined
+                })
+    
                 if (response.status === 200) {
                     setItems(response.data.items || [])
                     setClipboardExists(true)
@@ -35,12 +42,12 @@ export default function Clipboard() {
                 setLoading(false)
             }
         }
-
+    
         fetchItems()
     }, [code])
-
+    
     const addItem = async () => {
-        if (!text.trim()) {
+        if (!text.trim() || !title.trim()) {
             toast({
                 title: "Error",
                 description: "Title and text cannot be empty!",
@@ -48,17 +55,21 @@ export default function Clipboard() {
             })
             return
         }
-
+    
         setLoading(true)
-
+    
         const newItem = { title, text }
-
+    
         try {
+            // Retrieve passcode from localStorage if available
+            const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`)
+    
             const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/add-item`, {
                 code,
                 item: newItem,
+                passcode: storedPasscode || undefined
             })
-
+    
             if (response.status === 200 || response.status === 201) {
                 setItems(response.data.items || [])
                 setShowModal(false)
@@ -79,7 +90,7 @@ export default function Clipboard() {
         } finally {
             setLoading(false)
         }
-    }
+    }    
 
     return (
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
@@ -87,14 +98,14 @@ export default function Clipboard() {
             <main className="flex-1 container py-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-3xl font-bold">
-                        Clipboard <span className="text-blue-600 dark:text-blue-400">{code}</span>
+                        Clipboard <span className="text-violet-600 dark:text-violet-400">{code}</span>
                     </h1>
                 </div>
 
                 {loading ? (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {[...Array(3)].map((_, i) => (
-                            <div key={i} className="border rounded-lg p-4 animate-pulse bg-gray-200 dark:bg-gray-700"></div>
+                            <div key={i} className="relative overflow-hidden bg-white/10 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-12 animate-pulse"></div>
                         ))}
                     </div>
                 ) : clipboardExists ? (
@@ -202,7 +213,6 @@ function ClipboardItem({ item, toast }) {
     return (
         <div className="relative overflow-hidden bg-white/10 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="p-5 flex flex-col gap-3">
-                {/* Title + Copy Button */}
                 <div className="flex items-center justify-between">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 line-clamp-1">{item.title}</h3>
                     <button
@@ -210,11 +220,10 @@ function ClipboardItem({ item, toast }) {
                             }`}
                         onClick={handleCopy}
                     >
-                        {copied ? <Check className="h-5 w-5" /> : <ClipboardCopy className="h-5 w-5" />}
+                        {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                     </button>
                 </div>
 
-                {/* Text */}
                 <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{item.text}</p>
             </div>
         </div>

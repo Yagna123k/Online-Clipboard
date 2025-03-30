@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Clipboard, Home } from "lucide-react"
+import { Clipboard, Home,  } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 
 export function Navbar() {
