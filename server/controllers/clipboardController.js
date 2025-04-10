@@ -92,3 +92,37 @@ exports.getClipboardItems = async (req, res) => {
         res.status(500).json({ error: "Error retrieving clipboard items." });
     }
 };
+
+exports.deleteItem = async (req, res) => {
+    const { code, itemIndex, passcode } = req.query;
+
+    try {
+        const index = parseInt(itemIndex);
+        if (isNaN(index)) {
+            return res.status(400).json({ error: "Valid item index is required" });
+        }
+
+        const clipboard = await Clipboard.findOne({ code });
+        if (!clipboard) {
+            return res.status(404).json({ error: "Clipboard not found" });
+        }
+
+        // Private clipboard access
+        if (clipboard.isPrivate && clipboard.passcode !== passcode) {
+            return res.status(403).json({ error: "Incorrect passcode" });
+        }
+
+        if (index < 0 || index >= clipboard.items.length) {
+            return res.status(400).json({ error: "Item index out of range" });
+        }
+
+        // Remove the item
+        clipboard.items.splice(index, 1);
+        await clipboard.save();
+
+        res.json({ message: "Item deleted successfully", items: clipboard.items });
+    } catch (error) {
+        console.error("Error deleting item:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};

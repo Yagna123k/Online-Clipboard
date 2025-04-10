@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ClipboardCopy, Plus, X, Check, Loader2, Copy } from "lucide-react"
+import {Plus, X, Check, Loader2, Copy, Trash2 } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
 import axios from "axios"
 
@@ -20,17 +20,17 @@ export default function Clipboard() {
 
     useEffect(() => {
         if (!code) return
-    
+
         const fetchItems = async () => {
             setLoading(true)
-    
+
             try {
                 const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`)
-    
+
                 const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/${code}`, {
                     passcode: storedPasscode || undefined
                 })
-    
+
                 if (response.status === 200) {
                     setItems(response.data.items || [])
                     setClipboardExists(true)
@@ -42,10 +42,10 @@ export default function Clipboard() {
                 setLoading(false)
             }
         }
-    
+
         fetchItems()
     }, [code])
-    
+
     const addItem = async () => {
         if (!text.trim() || !title.trim()) {
             toast({
@@ -55,21 +55,21 @@ export default function Clipboard() {
             })
             return
         }
-    
+
         setLoading(true)
-    
+
         const newItem = { title, text }
-    
+
         try {
             // Retrieve passcode from localStorage if available
             const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`)
-    
+
             const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/add-item`, {
                 code,
                 item: newItem,
                 passcode: storedPasscode || undefined
             })
-    
+
             if (response.status === 200 || response.status === 201) {
                 setItems(response.data.items || [])
                 setShowModal(false)
@@ -90,7 +90,44 @@ export default function Clipboard() {
         } finally {
             setLoading(false)
         }
-    }    
+    }
+
+    const deleteItem = async (itemIndex) => {
+        if (!code || typeof itemIndex !== 'number') return;
+    
+        setLoading(true);
+    
+        try {
+            const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`);
+            const url = `${import.meta.env.VITE_API}/clipboard/delete-item`;
+    
+            const response = await axios.delete(url, {
+                params: {
+                    code,
+                    itemIndex,
+                    passcode: storedPasscode || undefined,
+                },
+            });
+    
+            if (response.status === 200) {
+                setItems(response.data.items || []);
+                toast({
+                    title: "Deleted",
+                    description: "Item successfully deleted.",
+                    variant: "destructive"
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to delete item. Please try again.",
+                variant: "destructive",
+            });
+            console.error("Error deleting item:", error);
+        } finally {
+            setLoading(false);
+        }
+    };        
 
     return (
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
@@ -111,9 +148,9 @@ export default function Clipboard() {
                 ) : clipboardExists ? (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {items.length > 0 ? (
-                            items.slice().reverse().map((item, id) => (
-                                <ClipboardItem key={id} item={item} toast={toast} />
-                            ))
+                            items.map((item, index) => (
+                                <ClipboardItem key={index} index={index} item={item} toast={toast} onDelete={deleteItem} />
+                              )).reverse()                                                         
                         ) : (
                             <div className="col-span-full text-center py-12">
                                 <h3 className="text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
@@ -196,7 +233,7 @@ export default function Clipboard() {
     )
 }
 
-function ClipboardItem({ item, toast }) {
+function ClipboardItem({ item, toast, onDelete, index }) {
     const [copied, setCopied] = useState(false)
 
     const handleCopy = () => {
@@ -215,13 +252,21 @@ function ClipboardItem({ item, toast }) {
             <div className="p-5 flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 line-clamp-1">{item.title}</h3>
-                    <button
-                        className={`p-2 rounded-full border transition-all ${copied ? "bg-green-500/20 border-green-500 text-green-500" : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                            }`}
-                        onClick={handleCopy}
-                    >
-                        {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                    </button>
+                    <div className="flex gap-2">
+                        <button
+                            className="p-2 rounded-full bg-red-100 dark:bg-red-900 text-red-600 hover:bg-red-200 dark:hover:bg-red-800 transition cursor-pointer"
+                            onClick={() => onDelete(index)}
+                        >
+                            <Trash2 className="h-5 w-5" />
+                        </button>
+                        <button
+                            className={`p-2 rounded-full border transition-all ${copied ? "bg-green-500/20 border-green-500 text-green-500" : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                }`}
+                            onClick={handleCopy}
+                        >
+                            {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                        </button>
+                    </div>
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{item.text}</p>
