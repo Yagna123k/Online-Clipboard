@@ -10,14 +10,14 @@ const Button = forwardRef(
       <Comp
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
-          variant === "default" && "bg-black text-white hover:bg-black/90",
+          "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          variant === "default" && "bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl",
           variant === "outline" &&
-            "bg-transparent border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800",
+            "bg-transparent border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600",
           variant === "ghost" && "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800",
-          size === "default" && "h-10 px-4 py-2",
-          size === "sm" && "h-9 rounded-md px-3",
-          size === "icon" && "h-8 w-8 p-0",
+          size === "default" && "h-11 px-6 py-2 text-sm",
+          size === "sm" && "h-9 rounded-lg px-4 text-sm",
+          size === "icon" && "h-9 w-9 p-0",
           className
         )}
         {...props}
