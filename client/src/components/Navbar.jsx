@@ -7,41 +7,41 @@ export function Navbar() {
     const isHome = location.pathname === "/"
 
     return (
-        <header className="sticky top-0 z-50 border-b border-slate-200/50 dark:border-slate-800/50 premium-glass">
-            <div className="container flex h-20 items-center justify-between">
-                <Link to="/" className="flex items-center gap-4 group">
+        <header className="sticky top-0 z-50 border-b border-white/20 bg-white/80 backdrop-blur-lg dark:border-gray-800/50 dark:bg-gray-900/80">
+            <div className="container flex h-16 items-center justify-between">
+                <Link to="/" className="flex items-center gap-3 group">
                     <div className="relative">
-                        <div className="absolute inset-0 classic-gradient rounded-2xl blur opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                        <div className="relative classic-gradient p-3 rounded-2xl shadow-lg">
-                            <Clipboard className="h-6 w-6 text-white" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="relative bg-gradient-to-r from-violet-600 to-purple-600 p-2 rounded-lg">
+                            <Clipboard className="h-5 w-5 text-white" />
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-2xl font-bold classic-heading premium-text-gradient">
+                        <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
                             ClipSync
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-                            Premium Clipboard
+                        <span className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+                            Share anywhere
                         </span>
                     </div>
                 </Link>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                     <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="hidden sm:flex items-center gap-3 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 font-medium"
+                        className="hidden sm:flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                         asChild
                     >
                         <a href="https://github.com/Yagna123k/Online-Clipboard" target="_blank" rel="noopener noreferrer">
                             <Github className="h-4 w-4" />
                             <span>Star on GitHub</span>
-                            <Star className="h-3 w-3 fill-current text-amber-500" />
+                            <Star className="h-3 w-3 fill-current" />
                         </a>
                     </Button>
                     
                     {!isHome && (
-                        <Button variant="outline" size="sm" className="premium-btn-hover font-medium" asChild>
+                        <Button variant="outline" size="sm" className="btn-hover-lift" asChild>
                             <Link to="/" className="flex items-center gap-2">
                                 <Home className="h-4 w-4" />
                                 <span>Home</span>

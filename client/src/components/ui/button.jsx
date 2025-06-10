@@ -10,17 +10,14 @@ const Button = forwardRef(
       <Comp
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-2xl font-semibold transition-all duration-400 premium-focus premium-btn-hover disabled:opacity-50 disabled:pointer-events-none cursor-pointer relative overflow-hidden",
-          variant === "default" && "bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg hover:shadow-2xl border border-slate-700/50",
-          variant === "primary" && "classic-gradient text-white shadow-lg hover:shadow-2xl border border-blue-500/20",
+          "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          variant === "default" && "bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl",
           variant === "outline" &&
-            "bg-white/80 dark:bg-slate-800/80 border-2 border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 backdrop-blur-sm",
-          variant === "ghost" && "bg-transparent hover:bg-slate-100/80 dark:hover:bg-slate-800/80 backdrop-blur-sm",
-          variant === "luxury" && "luxury-gradient text-white shadow-xl hover:shadow-2xl border border-purple-500/20",
-          size === "default" && "h-12 px-8 py-3 text-sm",
-          size === "sm" && "h-10 rounded-xl px-6 text-sm",
-          size === "lg" && "h-14 px-10 text-base rounded-2xl",
-          size === "icon" && "h-12 w-12 p-0",
+            "bg-transparent border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600",
+          variant === "ghost" && "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800",
+          size === "default" && "h-11 px-6 py-2 text-sm",
+          size === "sm" && "h-9 rounded-lg px-4 text-sm",
+          size === "icon" && "h-9 w-9 p-0",
           className
         )}
         {...props}
