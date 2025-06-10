@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, X, Check, Loader2, Copy, Trash2, FileText, Clock, Sparkles } from "lucide-react"
+import { Plus, X, Check, Loader2, Copy, Trash2, FileText, Clock, Sparkles, Crown, Star } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
 import axios from "axios"
 
@@ -133,31 +133,35 @@ export default function Clipboard() {
         <div className="min-h-screen flex flex-col">
             <Navbar />
             
-            <main className="flex-1 container py-8 relative">
-                {/* Background decorations */}
+            <main className="flex-1 container py-10 relative">
+                {/* Premium background decorations */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-10 right-10 w-32 h-32 bg-violet-200 dark:bg-violet-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-20 animate-float"></div>
-                    <div className="absolute bottom-10 left-10 w-40 h-40 bg-purple-200 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-20 animate-float" style={{animationDelay: '1s'}}></div>
+                    <div className="absolute top-10 right-10 w-40 h-40 bg-gradient-to-r from-blue-200/30 to-indigo-200/30 dark:from-blue-900/15 dark:to-indigo-900/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-elegant-float"></div>
+                    <div className="absolute bottom-10 left-10 w-48 h-48 bg-gradient-to-r from-purple-200/30 to-pink-200/30 dark:from-purple-900/15 dark:to-pink-900/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-elegant-float" style={{animationDelay: '1s'}}></div>
                 </div>
 
-                {/* Header */}
-                <div className="relative z-10 mb-8">
+                {/* Premium Header */}
+                <div className="relative z-10 mb-12">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600">
-                                <FileText className="h-6 w-6 text-white" />
+                        <div className="flex items-center gap-6">
+                            <div className="p-4 rounded-3xl classic-gradient shadow-2xl">
+                                <FileText className="h-8 w-8 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                    Clipboard
+                                <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 classic-heading mb-2">
+                                    Premium Clipboard
                                 </h1>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className="px-3 py-1 text-sm font-medium bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full">
+                                <div className="flex items-center gap-4 mt-2">
+                                    <span className="px-4 py-2 text-sm font-semibold classic-gradient text-white rounded-full shadow-lg">
                                         {code}
                                     </span>
-                                    <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                                        <Clock className="h-3 w-3" />
-                                        {items.length} items
+                                    <span className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 premium-body">
+                                        <Clock className="h-4 w-4" />
+                                        {items.length} premium items
+                                    </span>
+                                    <span className="flex items-center gap-1 text-sm text-amber-600 dark:text-amber-400">
+                                        <Crown className="h-4 w-4" />
+                                        <span className="font-medium">Premium</span>
                                     </span>
                                 </div>
                             </div>
@@ -166,10 +170,12 @@ export default function Clipboard() {
                         {clipboardExists && (
                             <Button
                                 onClick={() => setShowModal(true)}
-                                className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white btn-hover-lift"
+                                variant="primary"
+                                size="lg"
+                                className="premium-btn-hover shadow-2xl"
                             >
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add Item
+                                <Plus className="mr-3 h-5 w-5" />
+                                Add Premium Item
                             </Button>
                         )}
                     </div>
@@ -178,19 +184,19 @@ export default function Clipboard() {
                 {/* Content */}
                 <div className="relative z-10">
                     {loading ? (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {[...Array(6)].map((_, i) => (
-                                <div key={i} className="glass rounded-2xl p-6 animate-pulse">
-                                    <div className="skeleton h-6 w-3/4 rounded mb-4"></div>
-                                    <div className="skeleton h-4 w-full rounded mb-2"></div>
-                                    <div className="skeleton h-4 w-2/3 rounded"></div>
+                                <div key={i} className="premium-glass rounded-3xl p-8 animate-pulse">
+                                    <div className="premium-skeleton h-6 w-3/4 rounded-xl mb-6"></div>
+                                    <div className="premium-skeleton h-4 w-full rounded-lg mb-3"></div>
+                                    <div className="premium-skeleton h-4 w-2/3 rounded-lg"></div>
                                 </div>
                             ))}
                         </div>
                     ) : clipboardExists ? (
                         <>
                             {items.length > 0 ? (
-                                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                                     {items.map((item, index) => (
                                         <ClipboardItem 
                                             key={index} 
@@ -202,96 +208,105 @@ export default function Clipboard() {
                                     )).reverse()}
                                 </div>
                             ) : (
-                                <div className="text-center py-16">
-                                    <div className="mx-auto mb-6 h-20 w-20 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 flex items-center justify-center">
-                                        <Sparkles className="h-10 w-10 text-white" />
+                                <div className="text-center py-20">
+                                    <div className="mx-auto mb-8 h-24 w-24 rounded-3xl luxury-gradient flex items-center justify-center shadow-2xl animate-premium-glow">
+                                        <Sparkles className="h-12 w-12 text-white" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                                        Your clipboard is empty
+                                    <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4 classic-heading">
+                                        Your premium clipboard awaits
                                     </h3>
-                                    <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                                        Start by adding your first text snippet. Perfect for sharing code, notes, or any text across devices.
+                                    <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-lg mx-auto premium-body text-lg leading-relaxed">
+                                        Start by adding your first premium text snippet. Perfect for sharing code, 
+                                        notes, or any content with sophisticated style and security.
                                     </p>
                                     <Button 
                                         onClick={() => setShowModal(true)}
-                                        className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white btn-hover-lift"
+                                        variant="luxury"
+                                        size="lg"
+                                        className="premium-btn-hover shadow-2xl"
                                     >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Add Your First Item
+                                        <Plus className="mr-3 h-5 w-5" />
+                                        Add Your First Premium Item
                                     </Button>
                                 </div>
                             )}
                         </>
                     ) : (
-                        <div className="text-center py-16">
-                            <div className="mx-auto mb-6 h-20 w-20 rounded-2xl bg-red-100 dark:bg-red-900 flex items-center justify-center">
-                                <X className="h-10 w-10 text-red-600 dark:text-red-400" />
+                        <div className="text-center py-20">
+                            <div className="mx-auto mb-8 h-24 w-24 rounded-3xl bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 flex items-center justify-center shadow-2xl">
+                                <X className="h-12 w-12 text-red-600 dark:text-red-400" />
                             </div>
-                            <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
+                            <h3 className="text-3xl font-bold text-red-600 dark:text-red-400 mb-4 classic-heading">
                                 Clipboard not found
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
-                                The clipboard code you entered doesn't exist. Please check the code and try again.
+                            <p className="text-slate-600 dark:text-slate-400 max-w-lg mx-auto premium-body text-lg">
+                                The premium clipboard code you entered doesn't exist. Please verify the code and try again.
                             </p>
                         </div>
                     )}
                 </div>
 
-                {/* Floating Add Button */}
+                {/* Premium Floating Add Button */}
                 {clipboardExists && items.length > 0 && (
                     <Button
                         onClick={() => setShowModal(true)}
-                        className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-2xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white btn-hover-lift z-50"
+                        className="fixed bottom-8 right-8 h-16 w-16 rounded-full shadow-2xl luxury-gradient hover:shadow-3xl text-white premium-btn-hover z-50"
+                        size="icon"
                     >
-                        <Plus className="h-6 w-6" />
+                        <Plus className="h-7 w-7" />
                     </Button>
                 )}
 
-                {/* Modal */}
+                {/* Premium Modal */}
                 {showModal && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
-                        <div className="glass rounded-2xl shadow-2xl w-full max-w-lg animate-slide-up">
-                            <div className="p-6">
-                                {/* Header */}
-                                <div className="flex justify-between items-center mb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600">
-                                            <Plus className="h-5 w-5 text-white" />
+                    <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md z-50 p-6">
+                        <div className="premium-glass rounded-3xl shadow-2xl w-full max-w-2xl animate-sophisticated-slide-up">
+                            <div className="p-8">
+                                {/* Premium Header */}
+                                <div className="flex justify-between items-center mb-8">
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-3 rounded-2xl luxury-gradient shadow-lg">
+                                            <Plus className="h-6 w-6 text-white" />
                                         </div>
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                                            Add New Item
-                                        </h2>
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 classic-heading">
+                                                Add Premium Item
+                                            </h2>
+                                            <p className="text-sm text-slate-500 dark:text-slate-400 premium-body">
+                                                Create a new premium clipboard entry
+                                            </p>
+                                        </div>
                                     </div>
                                     <button
                                         onClick={() => setShowModal(false)}
-                                        className="p-2 rounded-xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                        className="p-3 rounded-2xl text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-all duration-200 premium-btn-hover"
                                         disabled={loading}
                                     >
-                                        <X className="h-5 w-5" />
+                                        <X className="h-6 w-6" />
                                     </button>
                                 </div>
 
-                                {/* Form */}
-                                <div className="space-y-4">
+                                {/* Premium Form */}
+                                <div className="space-y-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            Title
+                                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 classic-heading">
+                                            Premium Title
                                         </label>
                                         <Input
-                                            placeholder="Enter a descriptive title"
+                                            placeholder="Enter a sophisticated title"
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
                                             disabled={loading}
-                                            className="h-12 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl"
+                                            className="h-14 bg-white/70 dark:bg-slate-800/70 border-2 border-slate-200 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 rounded-2xl text-base"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            Content
+                                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 classic-heading">
+                                            Premium Content
                                         </label>
                                         <Textarea
-                                            placeholder="Paste or type your content here..."
-                                            className="min-h-[150px] bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl resize-none"
+                                            placeholder="Paste or type your premium content here..."
+                                            className="min-h-[180px] bg-white/70 dark:bg-slate-800/70 border-2 border-slate-200 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 rounded-2xl resize-none text-base leading-relaxed"
                                             value={text}
                                             onChange={(e) => setText(e.target.value)}
                                             disabled={loading}
@@ -299,30 +314,33 @@ export default function Clipboard() {
                                     </div>
                                 </div>
 
-                                {/* Actions */}
-                                <div className="flex justify-end gap-3 mt-6">
+                                {/* Premium Actions */}
+                                <div className="flex justify-end gap-4 mt-8">
                                     <Button 
                                         variant="outline" 
                                         onClick={() => setShowModal(false)} 
                                         disabled={loading}
-                                        className="px-6"
+                                        size="lg"
+                                        className="px-8 premium-btn-hover"
                                     >
                                         Cancel
                                     </Button>
                                     <Button 
                                         onClick={addItem} 
                                         disabled={loading}
-                                        className="px-6 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white btn-hover-lift"
+                                        variant="luxury"
+                                        size="lg"
+                                        className="px-8 premium-btn-hover shadow-xl"
                                     >
                                         {loading ? (
-                                            <div className="flex items-center gap-2">
-                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                            <div className="flex items-center gap-3">
+                                                <Loader2 className="h-5 w-5 animate-spin" />
                                                 <span>Adding...</span>
                                             </div>
                                         ) : (
-                                            <div className="flex items-center gap-2">
-                                                <Plus className="h-4 w-4" />
-                                                <span>Add Item</span>
+                                            <div className="flex items-center gap-3">
+                                                <Plus className="h-5 w-5" />
+                                                <span>Add Premium Item</span>
                                             </div>
                                         )}
                                     </Button>
@@ -344,7 +362,7 @@ function ClipboardItem({ item, toast, onDelete, index }) {
         setCopied(true)
         toast({
             title: "Copied!",
-            description: "Text has been copied to your clipboard.",
+            description: "Premium content copied to your clipboard.",
             variant: "success",
             duration: 2000,
         })
@@ -352,26 +370,34 @@ function ClipboardItem({ item, toast, onDelete, index }) {
     }
 
     return (
-        <div className="glass rounded-2xl shadow-lg card-hover animate-slide-up">
-            <div className="p-6">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-1 flex-1 mr-3">
-                        {item.title}
-                    </h3>
-                    <div className="flex gap-2 flex-shrink-0">
+        <div className="premium-glass rounded-3xl shadow-xl premium-card-hover animate-sophisticated-slide-up border border-slate-200/50 dark:border-slate-700/50">
+            <div className="p-8">
+                {/* Premium Header */}
+                <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start gap-4 flex-1 min-w-0">
+                        <div className="p-2 rounded-xl bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 shadow-sm">
+                            <Star className="h-4 w-4 text-slate-600 dark:text-slate-300" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 line-clamp-1 classic-heading mb-1">
+                                {item.title}
+                            </h3>
+                            <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">Premium Item</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-2 flex-shrink-0 ml-4">
                         <button
-                            className="p-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all duration-200 btn-hover-lift"
+                            className="p-3 rounded-2xl bg-red-50/80 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100/80 dark:hover:bg-red-900/40 transition-all duration-300 premium-btn-hover shadow-sm hover:shadow-md"
                             onClick={() => onDelete(index)}
-                            title="Delete item"
+                            title="Delete premium item"
                         >
                             <Trash2 className="h-4 w-4" />
                         </button>
                         <button
-                            className={`p-2 rounded-xl transition-all duration-200 btn-hover-lift ${
+                            className={`p-3 rounded-2xl transition-all duration-300 premium-btn-hover shadow-sm hover:shadow-md ${
                                 copied 
-                                    ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400" 
-                                    : "bg-gray-50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                    ? "bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400" 
+                                    : "bg-slate-50/80 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800"
                             }`}
                             onClick={handleCopy}
                             title="Copy to clipboard"
@@ -381,23 +407,26 @@ function ClipboardItem({ item, toast, onDelete, index }) {
                     </div>
                 </div>
 
-                {/* Content */}
-                <div className="relative">
-                    <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
+                {/* Premium Content */}
+                <div className="relative mb-6">
+                    <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed premium-body">
                         {item.text}
                     </p>
                     {item.text.length > 150 && (
-                        <div className="absolute bottom-0 right-0 bg-gradient-to-l from-white dark:from-gray-800 to-transparent pl-8 text-xs text-gray-500 dark:text-gray-400">
+                        <div className="absolute bottom-0 right-0 bg-gradient-to-l from-white dark:from-slate-800 to-transparent pl-12 text-xs text-slate-500 dark:text-slate-400">
                             ...
                         </div>
                     )}
                 </div>
 
-                {/* Footer */}
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                        <span>{item.text.length} characters</span>
-                        <span className="flex items-center gap-1">
+                {/* Premium Footer */}
+                <div className="pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span className="flex items-center gap-2 premium-body">
+                            <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                            {item.text.length} characters
+                        </span>
+                        <span className="flex items-center gap-2 premium-body">
                             <Clock className="h-3 w-3" />
                             Just now
                         </span>

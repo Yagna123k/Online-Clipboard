@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
-import { Lock, Send, Unlock, Sparkles, Shield, Zap, Globe } from "lucide-react"
+import { Lock, Send, Unlock, Sparkles, Shield, Zap, Globe, Crown } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
 import axios from "axios"
 
@@ -73,49 +73,52 @@ export default function Home() {
       <Navbar />
       
       {/* Hero Section */}
-      <main className="flex-1 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Background decorations */}
+      <main className="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
+        {/* Premium background decorations */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-violet-200 dark:bg-violet-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-30 animate-float"></div>
-          <div className="absolute top-3/4 right-1/4 w-64 h-64 bg-purple-200 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-30 animate-float" style={{animationDelay: '1s'}}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-gradient-to-r from-blue-200/40 to-indigo-200/40 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-elegant-float"></div>
+          <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-200/40 to-pink-200/40 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-elegant-float" style={{animationDelay: '1s'}}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-cyan-200/30 to-blue-200/30 dark:from-cyan-900/15 dark:to-blue-900/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-elegant-float" style={{animationDelay: '2s'}}></div>
         </div>
 
-        <div className="w-full max-w-md relative z-10">
+        <div className="w-full max-w-lg relative z-10">
           {/* Main Card */}
-          <div className="glass rounded-2xl shadow-2xl p-8 card-hover animate-slide-up">
-            <div className="text-center mb-8">
-              {/* Icon */}
-              <div className="mx-auto mb-6 h-16 w-16 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 flex items-center justify-center animate-pulse-glow">
+          <div className="premium-glass rounded-3xl shadow-2xl p-10 premium-card-hover animate-sophisticated-slide-up">
+            <div className="text-center mb-10">
+              {/* Premium Icon */}
+              <div className="mx-auto mb-8 h-20 w-20 rounded-3xl classic-gradient flex items-center justify-center animate-premium-glow shadow-2xl">
                 {isPrivate ? (
-                  <Lock className="h-8 w-8 text-white" />
+                  <Lock className="h-10 w-10 text-white" />
                 ) : (
-                  <Unlock className="h-8 w-8 text-white" />
+                  <Crown className="h-10 w-10 text-white" />
                 )}
               </div>
               
-              {/* Title */}
-              <h1 className="text-3xl font-bold mb-2 gradient-text">
+              {/* Premium Title */}
+              <h1 className="text-4xl font-bold mb-3 classic-heading premium-text-gradient">
                 Welcome to ClipSync
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                Share text snippets instantly across devices with secure, cloud-based clipboard management.
+              <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed premium-body text-lg">
+                Experience premium clipboard management with sophisticated design, 
+                secure sharing, and seamless synchronization across all your devices.
               </p>
 
-              {/* Privacy Toggle */}
-              <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 mb-6">
-                <div className="flex items-center gap-3">
-                  {isPrivate ? (
-                    <Shield className="h-5 w-5 text-violet-600" />
-                  ) : (
-                    <Globe className="h-5 w-5 text-blue-600" />
-                  )}
+              {/* Premium Privacy Toggle */}
+              <div className="flex items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-slate-50/80 to-slate-100/80 dark:from-slate-800/80 dark:to-slate-700/80 mb-8 border border-slate-200/50 dark:border-slate-600/50 backdrop-blur-sm">
+                <div className="flex items-center gap-4">
+                  <div className={`p-3 rounded-2xl ${isPrivate ? 'bg-gradient-to-r from-slate-700 to-slate-800' : 'bg-gradient-to-r from-blue-500 to-indigo-500'} shadow-lg`}>
+                    {isPrivate ? (
+                      <Shield className="h-5 w-5 text-white" />
+                    ) : (
+                      <Globe className="h-5 w-5 text-white" />
+                    )}
+                  </div>
                   <div className="text-left">
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    <span className="text-base font-semibold text-slate-900 dark:text-slate-100 classic-heading">
                       {isPrivate ? "Private Clipboard" : "Public Clipboard"}
                     </span>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {isPrivate ? "Secured with passcode" : "Open access"}
+                    <p className="text-sm text-slate-500 dark:text-slate-400 premium-body">
+                      {isPrivate ? "Enterprise-grade security" : "Open collaboration"}
                     </p>
                   </div>
                 </div>
@@ -125,26 +128,26 @@ export default function Home() {
                 />
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Premium Form */}
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="relative">
                   <Input
                     type="text"
-                    placeholder="Enter clipboard code (e.g., my-notes)"
+                    placeholder="Enter your clipboard code (e.g., my-premium-notes)"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="w-full h-12 text-center text-lg font-medium bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl transition-all duration-300"
+                    className="w-full h-14 text-center text-lg font-medium bg-white/70 dark:bg-slate-800/70 border-2 border-slate-200 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 rounded-2xl transition-all duration-400 shadow-lg hover:shadow-xl"
                   />
                 </div>
 
                 {isPrivate && (
-                  <div className="relative animate-slide-up">
+                  <div className="relative animate-sophisticated-slide-up">
                     <Input
                       type="password"
                       placeholder="Enter your secure passcode"
                       value={passcode}
                       onChange={(e) => setPasscode(e.target.value)}
-                      className="w-full h-12 text-center text-lg font-medium bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 focus:border-violet-500 dark:focus:border-violet-400 rounded-xl transition-all duration-300"
+                      className="w-full h-14 text-center text-lg font-medium bg-white/70 dark:bg-slate-800/70 border-2 border-slate-200 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 rounded-2xl transition-all duration-400 shadow-lg hover:shadow-xl"
                     />
                   </div>
                 )}
@@ -152,48 +155,61 @@ export default function Home() {
                 <Button 
                   type="submit" 
                   disabled={isLoading} 
-                  className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white rounded-xl btn-hover-lift transition-all duration-300"
+                  variant="primary"
+                  size="lg"
+                  className="w-full text-lg font-semibold transition-all duration-400 shadow-xl hover:shadow-2xl"
                 >
                   {isLoading ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                       <span>Connecting...</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <Send className="h-5 w-5" />
-                      <span>Access Clipboard</span>
+                      <span>Access Premium Clipboard</span>
                     </div>
                   )}
                 </Button>
               </form>
 
-              {/* Help Text */}
-              <div className="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
-                  <Sparkles className="h-4 w-4" />
-                  {isPrivate 
-                    ? "Your clipboard will be protected with end-to-end encryption" 
-                    : "Anyone with the code can access this clipboard"
-                  }
+              {/* Premium Help Text */}
+              <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-sm">
+                <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-3 premium-body">
+                  <Sparkles className="h-5 w-5 flex-shrink-0" />
+                  <span>
+                    {isPrivate 
+                      ? "Your clipboard will be protected with military-grade encryption and premium security features" 
+                      : "Enjoy seamless collaboration with our premium public clipboard experience"
+                    }
+                  </span>
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Features */}
-          <div className="mt-8 grid grid-cols-3 gap-4">
-            <div className="text-center p-4 rounded-xl glass card-hover">
-              <Zap className="h-6 w-6 mx-auto mb-2 text-yellow-500" />
-              <p className="text-xs font-medium text-gray-700 dark:text-gray-300">Instant Sync</p>
+          {/* Premium Features */}
+          <div className="mt-10 grid grid-cols-3 gap-6">
+            <div className="text-center p-6 rounded-2xl premium-glass premium-card-hover">
+              <div className="mx-auto mb-4 h-12 w-12 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+                <Zap className="h-6 w-6 text-white" />
+              </div>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 classic-heading">Lightning Fast</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 premium-body">Instant sync</p>
             </div>
-            <div className="text-center p-4 rounded-xl glass card-hover">
-              <Shield className="h-6 w-6 mx-auto mb-2 text-green-500" />
-              <p className="text-xs font-medium text-gray-700 dark:text-gray-300">Secure</p>
+            <div className="text-center p-6 rounded-2xl premium-glass premium-card-hover">
+              <div className="mx-auto mb-4 h-12 w-12 rounded-2xl bg-gradient-to-r from-emerald-400 to-green-500 flex items-center justify-center shadow-lg">
+                <Shield className="h-6 w-6 text-white" />
+              </div>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 classic-heading">Ultra Secure</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 premium-body">Bank-grade</p>
             </div>
-            <div className="text-center p-4 rounded-xl glass card-hover">
-              <Globe className="h-6 w-6 mx-auto mb-2 text-blue-500" />
-              <p className="text-xs font-medium text-gray-700 dark:text-gray-300">Cross-Device</p>
+            <div className="text-center p-6 rounded-2xl premium-glass premium-card-hover">
+              <div className="mx-auto mb-4 h-12 w-12 rounded-2xl bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg">
+                <Globe className="h-6 w-6 text-white" />
+              </div>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 classic-heading">Universal</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 premium-body">All devices</p>
             </div>
           </div>
         </div>
