@@ -1,0 +1,9 @@
+name: "Bug Report"
+description: "Report a bug"
+labels: ["bug"]
+body:
+  - type: input
+    id: description
+    attributes:
+      label: "Describe the bug"
+      placeholder: "What went wrong?"
