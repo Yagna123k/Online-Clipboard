@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useEffect, useState, useMemo } from "react"
+import { useParams, useSearchParams } from "react-router-dom"
 import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,7 +8,7 @@ import {Plus, X, Check, Loader2, Copy, Trash2 } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
 import axios from "axios"
 
-export default function Clipboard() {
+export default function Clipboard(props) {
     const { code } = useParams()
     const [items, setItems] = useState([])
     const [showModal, setShowModal] = useState(false)
@@ -17,6 +17,19 @@ export default function Clipboard() {
     const [clipboardExists, setClipboardExists] = useState(true)
     const [loading, setLoading] = useState(true)
     const { toast } = useToast()
+
+    const [searchParams] = useSearchParams();
+    const qRaw = searchParams.get("q") || "";
+    const q = qRaw.trim().toLowerCase();
+
+    const filteredEntries = useMemo(() => {
+        if (!q) return items;
+        return items.filter((entry) => {
+            const title = (entry.title || "").toString().toLowerCase();
+            const text = (entry.text || "").toString().toLowerCase();
+            return title.includes(q) || text.includes(q);
+        });
+    }, [items, q]);
 
     useEffect(() => {
         if (!code) return
@@ -61,7 +74,6 @@ export default function Clipboard() {
         const newItem = { title, text }
 
         try {
-            // Retrieve passcode from localStorage if available
             const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`)
 
             const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/add-item`, {
@@ -147,8 +159,8 @@ export default function Clipboard() {
                     </div>
                 ) : clipboardExists ? (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {items.length > 0 ? (
-                            items.map((item, index) => (
+                        {filteredEntries.length > 0 ? (
+                            filteredEntries.map((item, index) => (
                                 <ClipboardItem key={index} index={index} item={item} toast={toast} onDelete={deleteItem} />
                               )).reverse()                                                         
                         ) : (
