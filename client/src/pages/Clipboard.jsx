@@ -22,7 +22,6 @@ export default function Clipboard(props) {
     const qRaw = searchParams.get("q") || "";
     const q = qRaw.trim().toLowerCase();
 
-    // Simple client-side search: filter current `items` by title or text
     const filteredEntries = useMemo(() => {
         if (!q) return items;
         return items.filter((entry) => {
@@ -75,7 +74,6 @@ export default function Clipboard(props) {
         const newItem = { title, text }
 
         try {
-            // Retrieve passcode from localStorage if available
             const storedPasscode = localStorage.getItem(`clipboard_passcode_${code}`)
 
             const response = await axios.post(`${import.meta.env.VITE_API}/clipboard/add-item`, {
